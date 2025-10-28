@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}ExportHub - Torch Export Graphs{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h2>Available Model Cards</h2>
+    
+    {% if model_cards %}
+        <p style="margin: 1rem 0; color: #666;">{{ model_cards|length }} model card(s) available</p>
+        
+        <div class="model-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+            {% for card in model_cards %}
+            <div class="model-card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; background: white;">
+                <h3 style="margin-bottom: 0.5rem; color: #2c3e50;">
+                    {{ card.name if card.name else card.model_id }}
+                </h3>
+                {% if card.description %}
+                <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">
+                    {{ card.description[:100] }}{% if card.description|length > 100 %}...{% endif %}
+                </p>
+                {% endif %}
+                <div style="margin-top: 1rem;">
+                    <a href="{{ url_for('main.model_page', model_id=card.model_id) }}" class="btn">
+                        View Details →
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 3rem; color: #666;">
+            <p style="font-size: 1.2rem; margin-bottom: 1rem;">No model cards found</p>
+            <p style="margin-bottom: 1.5rem;">Add model cards to the models directory to get started.</p>
+            <p style="font-size: 0.9rem; color: #999;">
+                Each model should have its own directory with a model_card.json file.
+            </p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}ExportHub - Not Found{% endblock %}
+
+{% block content %}
+<div class="content" style="text-align: center; padding: 4rem 2rem;">
+    <div class="error" style="max-width: 600px; margin: 0 auto;">
+        <h2 style="font-size: 3rem; margin-bottom: 1rem;">404</h2>
+        <p style="font-size: 1.2rem;">{{ message }}</p>
+    </div>
+    <div style="margin-top: 2rem;">
+        <a href="{{ url_for('main.index') }}" class="btn">← Back to Home</a>
+    </div>
+</div>
+{% endblock %}
+

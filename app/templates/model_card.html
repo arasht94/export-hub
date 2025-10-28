@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}ExportHub - {{ card.name if card.name else card.model_id }}{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div style="margin-bottom: 1.5rem;">
+        <a href="{{ url_for('main.index') }}" style="color: #3498db; text-decoration: none; font-size: 0.9rem;">
+            ← Back to all models
+        </a>
+    </div>
+    
+    <h2 style="margin-bottom: 1rem;">{{ card.name if card.name else card.model_id }}</h2>
+    
+    {% if card.description %}
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;">
+        <p style="color: #555; line-height: 1.8;">{{ card.description }}</p>
+    </div>
+    {% endif %}
+    
+    <div style="margin: 2rem 0;">
+        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Model Information</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            {% if card.model_type %}
+            <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 0.75rem; font-weight: bold; color: #555;">Model Type:</td>
+                <td style="padding: 0.75rem; color: #333;">{{ card.model_type }}</td>
+            </tr>
+            {% endif %}
+            {% if card.version %}
+            <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 0.75rem; font-weight: bold; color: #555;">Version:</td>
+                <td style="padding: 0.75rem; color: #333;">{{ card.version }}</td>
+            </tr>
+            {% endif %}
+            {% if card.author %}
+            <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 0.75rem; font-weight: bold; color: #555;">Author:</td>
+                <td style="padding: 0.75rem; color: #333;">{{ card.author }}</td>
+            </tr>
+            {% endif %}
+            {% if card.license %}
+            <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 0.75rem; font-weight: bold; color: #555;">License:</td>
+                <td style="padding: 0.75rem; color: #333;">{{ card.license }}</td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+    
+    {% if card.downloads %}
+    <div style="margin: 2rem 0;">
+        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Download Files</h3>
+        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+            {% for download in card.downloads %}
+            <div style="background: white; padding: 1rem; border-radius: 5px; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e0e0e0;">
+                <div>
+                    <strong style="color: #2c3e50;">{{ download.name if download.name else download.filename }}</strong>
+                    {% if download.description %}
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 0.25rem;">{{ download.description }}</p>
+                    {% endif %}
+                    {% if download.size %}
+                    <p style="color: #999; font-size: 0.85rem; margin-top: 0.25rem;">Size: {{ download.size }}</p>
+                    {% endif %}
+                </div>
+                <a href="{{ url_for('main.download_file', model_id=card.model_id, filename=download.filename) }}" 
+                   class="btn" 
+                   download>
+                    📥 Download
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if card.technical_details %}
+    <div style="margin: 2rem 0;">
+        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Technical Details</h3>
+        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+            <pre style="background: white; padding: 1rem; border-radius: 5px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.9rem;">{{ card.technical_details }}</pre>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if card.usage %}
+    <div style="margin: 2rem 0;">
+        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Usage</h3>
+        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+            <pre style="background: white; padding: 1rem; border-radius: 5px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.9rem;">{{ card.usage }}</pre>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
