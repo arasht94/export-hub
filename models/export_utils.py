@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os
+import tempfile
 
 import torch
 
@@ -48,9 +49,9 @@ def export_and_save(
     }
 
     # Save model card to repo
-    config_path = Path(__file__).parent / "configs" / model_name
-    config_path.mkdir(exist_ok=True)
+    config_path = os.path.join(os.path.dirname(__file__), "configs", model_name)
+    os.makedirs(config_path, exist_ok=True)
 
-    json_path = config_path / "model_card.json"
+    json_path = os.path.join(config_path, "model_card.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(model_card, f, indent=4)
