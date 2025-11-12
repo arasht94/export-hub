@@ -25,6 +25,22 @@ python run.py
 
 The application will be available at `http://localhost:5000`
 
+## Exporting Models
+
+To export all models, run the following:
+
+```bash
+python models/export_all.py
+```
+
+## Linting
+
+Ruff is used as the main linter. Run the following from the repo root before committing:
+
+```bash
+ruff format .
+```
+
 ## Project Structure
 
 ```
