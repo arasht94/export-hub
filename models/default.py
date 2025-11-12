@@ -14,9 +14,9 @@ def export_default_models():
     logger.info(f"Starting default model export process")
 
     models = [
-        "meta-llama/Meta-Llama-3-8B-Instruct",
+        # "meta-llama/Meta-Llama-3-8B-Instruct",
         # "Qwen/Qwen3-1.7B",
-        # "DeepChem/ChemBERTa-100M-MLM"
+        "DeepChem/ChemBERTa-100M-MLM"
     ]
 
     for model_name in models:
