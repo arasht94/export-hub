@@ -11,13 +11,15 @@
     </div>
     
     <div style="margin-bottom: 1rem;">
-        {% if card.organization %}
-        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">
-            Organization: <strong>{{ card.organization }}</strong>
-        </p>
-        {% endif %}
         <h2 style="margin-bottom: 0.5rem; color: #2c3e50;">
-            {{ card.model_name if card.model_name else card.model_id }}
+            {% if card.organization %}
+            <a href="{{ url_for('main.organization_page', organization=card.organization) }}" 
+               style="color: #3498db; text-decoration: none; font-size: 0.9rem; font-weight: normal; margin-right: 0.5rem;">
+                {{ card.organization }}
+            </a>
+            <span style="color: #999; margin: 0 0.5rem;">/</span>
+            {% endif %}
+            <span>{{ card.model_name if card.model_name else card.model_id }}</span>
         </h2>
         {% if card.model_id %}
         <p style="color: #999; font-size: 0.85rem;">Model ID: {{ card.model_id }}</p>
@@ -56,12 +58,6 @@
                     <td style="padding: 1rem; color: #333;">
                         <code style="background: #f0f0f0; padding: 0.25rem 0.5rem; border-radius: 3px; font-size: 0.85rem; word-break: break-all; display: inline-block; max-width: 100%;">{{ card.sha256 }}</code>
                     </td>
-                </tr>
-                {% endif %}
-                {% if card.organization %}
-                <tr style="border-bottom: 1px solid #e0e0e0;">
-                    <td style="padding: 1rem; font-weight: bold; color: #555; background: #f8f9fa;">Organization:</td>
-                    <td style="padding: 1rem; color: #333;">{{ card.organization }}</td>
                 </tr>
                 {% endif %}
                 {% if card.model_id %}

@@ -22,6 +22,20 @@ def index():
     return render_template("index.html", organizations=orgs_with_models)
 
 
+@main.route("/organization/<organization>")
+def organization_page(organization):
+    """Organization page showing all models for an organization"""
+    models = parser.get_models_by_organization(organization)
+    
+    if not models:
+        return render_template(
+            "404.html",
+            message=f"Organization '{organization}' not found or has no models"
+        ), 404
+    
+    return render_template("organization.html", organization=organization, models=models)
+
+
 @main.route("/model/<organization>/<model_id>")
 def model_page(organization, model_id):
     """Individual model card page"""

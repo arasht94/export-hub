@@ -10,7 +10,10 @@
         {% for org_name, models in organizations.items() %}
         <div class="organization-section" style="margin-bottom: 3rem;">
             <h3 style="font-size: 1.8rem; color: #2c3e50; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #3498db;">
-                {{ org_name }}
+                <a href="{{ url_for('main.organization_page', organization=org_name) }}" 
+                   style="color: #2c3e50; text-decoration: none; transition: color 0.2s;">
+                    {{ org_name }}
+                </a>
             </h3>
             
             {% if models %}
@@ -70,6 +73,9 @@
 .model-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.organization-section h3 a:hover {
+    color: #3498db;
 }
 </style>
 {% endblock %}
