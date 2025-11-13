@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}ExportHub - {{ card.name if card.name else card.model_id }}{% endblock %}
+{% block title %}ExportHub - {{ card.model_name if card.model_name else card.model_id }}{% endblock %}
 
 {% block content %}
 <div class="content">
@@ -10,87 +10,78 @@
         </a>
     </div>
     
-    <h2 style="margin-bottom: 1rem;">{{ card.name if card.name else card.model_id }}</h2>
-    
-    {% if card.description %}
-    <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;">
-        <p style="color: #555; line-height: 1.8;">{{ card.description }}</p>
-    </div>
-    {% endif %}
-    
-    <div style="margin: 2rem 0;">
-        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Model Information</h3>
-        <table style="width: 100%; border-collapse: collapse;">
-            {% if card.model_type %}
-            <tr style="border-bottom: 1px solid #e0e0e0;">
-                <td style="padding: 0.75rem; font-weight: bold; color: #555;">Model Type:</td>
-                <td style="padding: 0.75rem; color: #333;">{{ card.model_type }}</td>
-            </tr>
-            {% endif %}
-            {% if card.version %}
-            <tr style="border-bottom: 1px solid #e0e0e0;">
-                <td style="padding: 0.75rem; font-weight: bold; color: #555;">Version:</td>
-                <td style="padding: 0.75rem; color: #333;">{{ card.version }}</td>
-            </tr>
-            {% endif %}
-            {% if card.author %}
-            <tr style="border-bottom: 1px solid #e0e0e0;">
-                <td style="padding: 0.75rem; font-weight: bold; color: #555;">Author:</td>
-                <td style="padding: 0.75rem; color: #333;">{{ card.author }}</td>
-            </tr>
-            {% endif %}
-            {% if card.license %}
-            <tr style="border-bottom: 1px solid #e0e0e0;">
-                <td style="padding: 0.75rem; font-weight: bold; color: #555;">License:</td>
-                <td style="padding: 0.75rem; color: #333;">{{ card.license }}</td>
-            </tr>
-            {% endif %}
-        </table>
+    <div style="margin-bottom: 1rem;">
+        {% if card.organization %}
+        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">
+            Organization: <strong>{{ card.organization }}</strong>
+        </p>
+        {% endif %}
+        <h2 style="margin-bottom: 0.5rem; color: #2c3e50;">
+            {{ card.model_name if card.model_name else card.model_id }}
+        </h2>
+        {% if card.model_id %}
+        <p style="color: #999; font-size: 0.85rem;">Model ID: {{ card.model_id }}</p>
+        {% endif %}
     </div>
     
-    {% if card.downloads %}
     <div style="margin: 2rem 0;">
-        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Download Files</h3>
+        <h3 style="margin-bottom: 1rem; color: #2c3e50; padding-bottom: 0.5rem; border-bottom: 2px solid #e0e0e0;">Model Information</h3>
         <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
-            {% for download in card.downloads %}
-            <div style="background: white; padding: 1rem; border-radius: 5px; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e0e0e0;">
-                <div>
-                    <strong style="color: #2c3e50;">{{ download.name if download.name else download.filename }}</strong>
-                    {% if download.description %}
-                    <p style="color: #666; font-size: 0.9rem; margin-top: 0.25rem;">{{ download.description }}</p>
-                    {% endif %}
-                    {% if download.size %}
-                    <p style="color: #999; font-size: 0.85rem; margin-top: 0.25rem;">Size: {{ download.size }}</p>
-                    {% endif %}
-                </div>
-                <a href="{{ url_for('main.download_file', model_id=card.model_id, filename=download.filename) }}" 
-                   class="btn" 
-                   download>
-                    📥 Download
-                </a>
-            </div>
-            {% endfor %}
+            <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 5px; overflow: hidden;">
+                {% if card.model_name %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 1rem; font-weight: bold; color: #555; width: 200px; background: #f8f9fa;">Model Name:</td>
+                    <td style="padding: 1rem; color: #333;">{{ card.model_name }}</td>
+                </tr>
+                {% endif %}
+                {% if card.model_file_name %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 1rem; font-weight: bold; color: #555; background: #f8f9fa;">Model File Name:</td>
+                    <td style="padding: 1rem; color: #333;">
+                        <code style="background: #f0f0f0; padding: 0.25rem 0.5rem; border-radius: 3px; font-size: 0.9rem;">{{ card.model_file_name }}</code>
+                    </td>
+                </tr>
+                {% endif %}
+                {% if card.input_sizes %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 1rem; font-weight: bold; color: #555; background: #f8f9fa;">Input Sizes:</td>
+                    <td style="padding: 1rem; color: #333;">
+                        <pre style="margin: 0; font-family: 'Courier New', monospace; font-size: 0.9rem; background: #f0f0f0; padding: 0.5rem; border-radius: 3px; display: inline-block;">{{ card.input_sizes | tojson(indent=2) }}</pre>
+                    </td>
+                </tr>
+                {% endif %}
+                {% if card.sha256 %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 1rem; font-weight: bold; color: #555; background: #f8f9fa;">SHA256 Hash:</td>
+                    <td style="padding: 1rem; color: #333;">
+                        <code style="background: #f0f0f0; padding: 0.25rem 0.5rem; border-radius: 3px; font-size: 0.85rem; word-break: break-all; display: inline-block; max-width: 100%;">{{ card.sha256 }}</code>
+                    </td>
+                </tr>
+                {% endif %}
+                {% if card.organization %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 1rem; font-weight: bold; color: #555; background: #f8f9fa;">Organization:</td>
+                    <td style="padding: 1rem; color: #333;">{{ card.organization }}</td>
+                </tr>
+                {% endif %}
+                {% if card.model_id %}
+                <tr>
+                    <td style="padding: 1rem; font-weight: bold; color: #555; background: #f8f9fa;">Model ID:</td>
+                    <td style="padding: 1rem; color: #333;">
+                        <code style="background: #f0f0f0; padding: 0.25rem 0.5rem; border-radius: 3px; font-size: 0.9rem;">{{ card.model_id }}</code>
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
         </div>
     </div>
-    {% endif %}
     
-    {% if card.technical_details %}
     <div style="margin: 2rem 0;">
-        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Technical Details</h3>
+        <h3 style="margin-bottom: 1rem; color: #2c3e50; padding-bottom: 0.5rem; border-bottom: 2px solid #e0e0e0;">Raw Configuration</h3>
         <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
-            <pre style="background: white; padding: 1rem; border-radius: 5px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.9rem;">{{ card.technical_details }}</pre>
+            <pre style="background: white; padding: 1rem; border-radius: 5px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.6; margin: 0;">{{ card | tojson(indent=2) }}</pre>
         </div>
     </div>
-    {% endif %}
-    
-    {% if card.usage %}
-    <div style="margin: 2rem 0;">
-        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Usage</h3>
-        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
-            <pre style="background: white; padding: 1rem; border-radius: 5px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.9rem;">{{ card.usage }}</pre>
-        </div>
-    </div>
-    {% endif %}
 </div>
 {% endblock %}
 
