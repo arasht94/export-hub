@@ -52,6 +52,6 @@ def export_and_save(
     config_path = os.path.join(os.path.dirname(__file__), "configs", model_name)
     os.makedirs(config_path, exist_ok=True)
 
-    json_path = os.path.join(config_path, "model_card.json")
+    json_path = os.path.join(config_path + ".json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(model_card, f, indent=4)
