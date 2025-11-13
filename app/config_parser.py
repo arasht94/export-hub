@@ -1,4 +1,5 @@
 """Parser class for reading and organizing model configs from the configs folder."""
+
 import os
 import json
 from pathlib import Path
@@ -123,4 +124,3 @@ class ConfigParser:
         """
         models = self.get_models_by_organization(organization)
         return models[:limit]
-

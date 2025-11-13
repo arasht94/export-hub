@@ -18,7 +18,7 @@ def index():
     orgs_with_models = {}
     for org, models in organizations_data.items():
         orgs_with_models[org] = parser.get_top_models(org, limit=6)
-    
+
     return render_template("index.html", organizations=orgs_with_models)
 
 
@@ -26,14 +26,16 @@ def index():
 def organization_page(organization):
     """Organization page showing all models for an organization"""
     models = parser.get_models_by_organization(organization)
-    
+
     if not models:
         return render_template(
             "404.html",
-            message=f"Organization '{organization}' not found or has no models"
+            message=f"Organization '{organization}' not found or has no models",
         ), 404
-    
-    return render_template("organization.html", organization=organization, models=models)
+
+    return render_template(
+        "organization.html", organization=organization, models=models
+    )
 
 
 @main.route("/model/<organization>/<model_id>")
@@ -43,8 +45,8 @@ def model_page(organization, model_id):
 
     if not model_card:
         return render_template(
-            "404.html", 
-            message=f"Model card '{model_id}' in organization '{organization}' not found"
+            "404.html",
+            message=f"Model card '{model_id}' in organization '{organization}' not found",
         ), 404
 
     return render_template("model_card.html", card=model_card)
