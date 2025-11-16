@@ -90,9 +90,9 @@ def export_and_save(model: torch.nn.Module, inputs: tuple[torch.Tensor], model_i
     }
 
     # Save model card to repo
-    config_path = os.path.join(os.path.dirname(__file__), "configs", model_id)
+    config_path = os.path.join(os.path.dirname(__file__), "configs", organization)
     os.makedirs(config_path, exist_ok=True)
 
-    json_path = os.path.join(config_path + ".json")
+    json_path = os.path.join(config_path, model_name + ".json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(model_card, f, indent=4)

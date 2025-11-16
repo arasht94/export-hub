@@ -19,16 +19,22 @@
             {% if models %}
                 <div class="model-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
                     {% for model in models[:6] %}
-                    <a href="{{ url_for('main.model_page', organization=model.organization, model_id=model.model_id) }}" 
+                    <a href="{{ url_for('main.model_page', organization=model.organization, model_id=model._filename_id) }}" 
                        style="text-decoration: none; color: inherit;">
                         <div class="model-card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; background: white; height: 100%; cursor: pointer; display: flex; flex-direction: column;">
                             <h4 style="margin-bottom: 0.75rem; color: #2c3e50; font-size: 1.1rem;">
-                                {{ model.model_name if model.model_name else model.model_id }}
+                                {{ model.model_id }}
                             </h4>
                             
-                            {% if model.model_file_name %}
+                            {% if model.model_name %}
                             <p style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem;">
-                                <strong>File:</strong> {{ model.model_file_name }}
+                                <strong>Name:</strong> {{ model.model_name }}
+                            </p>
+                            {% endif %}
+                            
+                            {% if model.model_file_link %}
+                            <p style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem;">
+                                <strong>Model File:</strong> <a href="{{ model.model_file_link }}" target="_blank" style="color: #3498db; text-decoration: none;">Download</a>
                             </p>
                             {% endif %}
                             
@@ -38,9 +44,9 @@
                             </p>
                             {% endif %}
                             
-                            {% if model.sha256 %}
+                            {% if model.model_sha256 %}
                             <p style="color: #999; font-size: 0.75rem; margin-top: auto; padding-top: 1rem; word-break: break-all;">
-                                SHA256: {{ model.sha256[:16] }}...
+                                SHA256: {{ model.model_sha256[:16] }}...
                             </p>
                             {% endif %}
                             

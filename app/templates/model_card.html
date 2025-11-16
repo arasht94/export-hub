@@ -36,11 +36,23 @@
                     <td style="padding: 1rem; color: #333;">{{ card.model_name }}</td>
                 </tr>
                 {% endif %}
-                {% if card.model_file_name %}
+                {% if card.model_file_link %}
                 <tr style="border-bottom: 1px solid #e0e0e0;">
-                    <td style="padding: 1rem; font-weight: bold; color: #555; background: #f8f9fa;">Model File Name:</td>
+                    <td style="padding: 1rem; font-weight: bold; color: #555; background: #f8f9fa;">Model File:</td>
                     <td style="padding: 1rem; color: #333;">
-                        <code style="background: #f0f0f0; padding: 0.25rem 0.5rem; border-radius: 3px; font-size: 0.9rem;">{{ card.model_file_name }}</code>
+                        <a href="{{ card.model_file_link }}" target="_blank" style="color: #3498db; text-decoration: none;">
+                            {{ card.model_file_link }}
+                        </a>
+                    </td>
+                </tr>
+                {% endif %}
+                {% if card.fx_file_link %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 1rem; font-weight: bold; color: #555; background: #f8f9fa;">FX File:</td>
+                    <td style="padding: 1rem; color: #333;">
+                        <a href="{{ card.fx_file_link }}" target="_blank" style="color: #3498db; text-decoration: none;">
+                            {{ card.fx_file_link }}
+                        </a>
                     </td>
                 </tr>
                 {% endif %}
@@ -52,11 +64,19 @@
                     </td>
                 </tr>
                 {% endif %}
-                {% if card.sha256 %}
+                {% if card.model_sha256 %}
                 <tr style="border-bottom: 1px solid #e0e0e0;">
-                    <td style="padding: 1rem; font-weight: bold; color: #555; background: #f8f9fa;">SHA256 Hash:</td>
+                    <td style="padding: 1rem; font-weight: bold; color: #555; background: #f8f9fa;">Model SHA256:</td>
                     <td style="padding: 1rem; color: #333;">
-                        <code style="background: #f0f0f0; padding: 0.25rem 0.5rem; border-radius: 3px; font-size: 0.85rem; word-break: break-all; display: inline-block; max-width: 100%;">{{ card.sha256 }}</code>
+                        <code style="background: #f0f0f0; padding: 0.25rem 0.5rem; border-radius: 3px; font-size: 0.85rem; word-break: break-all; display: inline-block; max-width: 100%;">{{ card.model_sha256 }}</code>
+                    </td>
+                </tr>
+                {% endif %}
+                {% if card.fx_sha256 %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 1rem; font-weight: bold; color: #555; background: #f8f9fa;">FX SHA256:</td>
+                    <td style="padding: 1rem; color: #333;">
+                        <code style="background: #f0f0f0; padding: 0.25rem 0.5rem; border-radius: 3px; font-size: 0.85rem; word-break: break-all; display: inline-block; max-width: 100%;">{{ card.fx_sha256 }}</code>
                     </td>
                 </tr>
                 {% endif %}

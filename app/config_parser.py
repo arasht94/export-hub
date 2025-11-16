@@ -42,59 +42,114 @@ class ConfigParser:
     def get_models_by_organization(self, organization: str) -> List[Dict]:
         """
         Get all models for a specific organization.
+        Searches both by folder name and by JSON organization field.
 
         Args:
-            organization: The organization name (subfolder name).
+            organization: The organization name (can be from folder or JSON).
 
         Returns:
-            List of model dictionaries, each containing the parsed JSON data
-            plus metadata like 'model_id' and 'organization'.
+            List of model dictionaries matching the organization.
+            Uses organization and model_id from JSON if present, otherwise infers from folder/filename.
         """
-        org_dir = self.configs_dir / organization
-        if not org_dir.exists() or not org_dir.is_dir():
-            return []
-
         models = []
-        for json_file in org_dir.glob("*.json"):
-            try:
-                with open(json_file, "r", encoding="utf-8") as f:
-                    model_data = json.load(f)
-                    # Add metadata
-                    model_data["model_id"] = json_file.stem  # filename without .json
-                    model_data["organization"] = organization
-                    model_data["config_path"] = str(json_file)
-                    models.append(model_data)
-            except Exception as e:
-                print(f"Error reading {json_file}: {e}")
+        
+        # First, try to find by folder name
+        org_dir = self.configs_dir / organization
+        if org_dir.exists() and org_dir.is_dir():
+            for json_file in org_dir.glob("*.json"):
+                try:
+                    with open(json_file, "r", encoding="utf-8") as f:
+                        model_data = json.load(f)
+                        # Use organization from JSON if present, otherwise use folder name
+                        if "organization" not in model_data:
+                            model_data["organization"] = organization
+                        # Use model_id from JSON if present, otherwise use filename
+                        if "model_id" not in model_data:
+                            model_data["model_id"] = json_file.stem
+                        # Store filename for URL routing
+                        model_data["_filename_id"] = json_file.stem
+                        model_data["config_path"] = str(json_file)
+                        models.append(model_data)
+                except Exception as e:
+                    print(f"Error reading {json_file}: {e}")
+        
+        # Also search all folders for models with matching JSON organization field
+        # (in case organization in JSON doesn't match folder name)
+        for org_dir in self.configs_dir.iterdir():
+            if not org_dir.is_dir() or org_dir.name == organization:
+                continue  # Skip if already processed or not a directory
+            
+            for json_file in org_dir.glob("*.json"):
+                try:
+                    with open(json_file, "r", encoding="utf-8") as f:
+                        model_data = json.load(f)
+                        json_org = model_data.get("organization")
+                        if json_org == organization:
+                            # Use organization from JSON
+                            if "organization" not in model_data:
+                                model_data["organization"] = organization
+                            # Use model_id from JSON if present, otherwise use filename
+                            if "model_id" not in model_data:
+                                model_data["model_id"] = json_file.stem
+                            # Store filename for URL routing
+                            model_data["_filename_id"] = json_file.stem
+                            model_data["config_path"] = str(json_file)
+                            models.append(model_data)
+                except Exception as e:
+                    print(f"Error reading {json_file}: {e}")
 
         return models
 
     def get_all_models_by_organization(self) -> Dict[str, List[Dict]]:
         """
         Get all models organized by organization.
+        Uses organization from JSON if present, otherwise groups by folder.
 
         Returns:
             Dictionary mapping organization names to lists of model dictionaries.
         """
-        organizations = self.get_organizations()
-        result = {}
+        if not self.configs_dir.exists():
+            return {}
 
-        for org in organizations:
-            models = self.get_models_by_organization(org)
-            result[org] = models
+        result = {}
+        # Scan all JSON files and group by organization from JSON
+        for org_dir in self.configs_dir.iterdir():
+            if not org_dir.is_dir():
+                continue
+
+            for json_file in org_dir.glob("*.json"):
+                try:
+                    with open(json_file, "r", encoding="utf-8") as f:
+                        model_data = json.load(f)
+                        # Use organization from JSON if present, otherwise use folder name
+                        org_name = model_data.get("organization", org_dir.name)
+                        # Use model_id from JSON if present, otherwise use filename
+                        if "model_id" not in model_data:
+                            model_data["model_id"] = json_file.stem
+                        # Store filename for URL routing
+                        model_data["_filename_id"] = json_file.stem
+                        model_data["config_path"] = str(json_file)
+
+                        if org_name not in result:
+                            result[org_name] = []
+                        result[org_name].append(model_data)
+                except Exception as e:
+                    print(f"Error reading {json_file}: {e}")
 
         return result
 
     def get_model(self, organization: str, model_id: str) -> Optional[Dict]:
         """
         Get a specific model by organization and model ID.
+        model_id here is the filename without extension (used in URL).
 
         Args:
-            organization: The organization name.
-            model_id: The model ID (JSON filename without extension).
+            organization: The organization name (folder name).
+            model_id: The model ID (JSON filename without extension, used in URL).
 
         Returns:
             Model dictionary if found, None otherwise.
+            Uses organization and model_id from JSON if present.
         """
         json_file = self.configs_dir / organization / f"{model_id}.json"
         if not json_file.exists():
@@ -103,8 +158,14 @@ class ConfigParser:
         try:
             with open(json_file, "r", encoding="utf-8") as f:
                 model_data = json.load(f)
-                model_data["model_id"] = model_id
-                model_data["organization"] = organization
+                # Use organization from JSON if present, otherwise use parameter
+                if "organization" not in model_data:
+                    model_data["organization"] = organization
+                # Use model_id from JSON if present, otherwise use filename
+                if "model_id" not in model_data:
+                    model_data["model_id"] = model_id
+                # Store filename for URL routing
+                model_data["_filename_id"] = model_id
                 model_data["config_path"] = str(json_file)
                 return model_data
         except Exception as e:

@@ -8,8 +8,8 @@
             1
         ]
     ],
-    "model_file_link": "https://export-hub-models.s3.amazonaws.com//DeepChem/ChemBERTa-100M-MLM.pt2",
-    "model_sha256": "d918ff7885b36a907d25d46a598a901fa26485cec1202d72f012927c1b8c9631",
-    "fx_file_link": "https://export-hub-models.s3.amazonaws.com//DeepChem/ChemBERTa-100M-MLM.fx",
+    "model_file_link": "https://export-hub-models.s3.us-east-1.amazonaws.com/DeepChem/ChemBERTa-100M-MLM.pt2",
+    "model_sha256": "ca09fb9be46e812922da2a8b96ced26d27de70d8a91141381e402bddd8815fbb",
+    "fx_file_link": "https://export-hub-models.s3.us-east-1.amazonaws.com/DeepChem/ChemBERTa-100M-MLM.fx",
     "fx_sha256": "b63bbf0104e7994bc9321ed39198f54d7db33a9c61f33d02acc304a97b75eb53"
 }

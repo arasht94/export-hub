@@ -14,7 +14,7 @@ def index():
     # Get top 6 models for each organization
     orgs_with_models = {}
     for org, models in organizations_data.items():
-        orgs_with_models[org] = parser.get_top_models(org, limit=6)
+        orgs_with_models[org] = models[:6]  # Just take first 6 from the list
 
     return render_template("index.html", organizations=orgs_with_models)
 
