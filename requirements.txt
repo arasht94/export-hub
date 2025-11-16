@@ -1,7 +1,8 @@
-Flask==3.0.0
+boto3
+Flask
 hf_transfer
 huggingface_hub[cli]
-jinja2==3.1.2
+jinja2
 ruff
 torch==2.9.0
 transformers==4.57.1
