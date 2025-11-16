@@ -11,7 +11,7 @@ logger = get_logger(__name__)
 
 
 def export_default_models():
-    logger.info(f"Starting default model export process")
+    logger.info("Starting default model export process")
 
     models = [
         # "meta-llama/Meta-Llama-3-8B-Instruct",
@@ -25,7 +25,7 @@ def export_default_models():
         inputs = (torch.randint(0, model_instance.config.vocab_size, (1, 1)),)
         export_and_save(model_instance, inputs, model_name)
 
-    logger.info(f"Default models exported successfully!")
+    logger.info("Default models exported successfully!")
 
 
 def _parse_args() -> argparse.Namespace:
@@ -35,7 +35,7 @@ def _parse_args() -> argparse.Namespace:
 
 
 def main():
-    args = parse_args()
+    args = _parse_args()
     export_default_models(args.output_path)
 
 

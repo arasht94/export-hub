@@ -1,7 +1,4 @@
-from flask import Blueprint, render_template, send_file, jsonify
-import os
-import json
-from pathlib import Path
+from flask import Blueprint, render_template
 from app.config_parser import ConfigParser
 
 main = Blueprint("main", __name__)
