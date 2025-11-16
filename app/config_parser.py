@@ -52,7 +52,7 @@ class ConfigParser:
             Uses organization and model_id from JSON if present, otherwise infers from folder/filename.
         """
         models = []
-        
+
         # First, try to find by folder name
         org_dir = self.configs_dir / organization
         if org_dir.exists() and org_dir.is_dir():
@@ -72,13 +72,13 @@ class ConfigParser:
                         models.append(model_data)
                 except Exception as e:
                     print(f"Error reading {json_file}: {e}")
-        
+
         # Also search all folders for models with matching JSON organization field
         # (in case organization in JSON doesn't match folder name)
         for org_dir in self.configs_dir.iterdir():
             if not org_dir.is_dir() or org_dir.name == organization:
                 continue  # Skip if already processed or not a directory
-            
+
             for json_file in org_dir.glob("*.json"):
                 try:
                     with open(json_file, "r", encoding="utf-8") as f:
